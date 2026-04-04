@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+torch
+opencv-python
+scikit-learn
+passlib[bcrypt]
+google-search-results
+pydantic
+numpy
+python-multipart
