@@ -1,11 +1,11 @@
 import os
-from fastapi import APIRouter, UploadFile
-from app.services.video_services import process_video
+from fastapi import APIRouter, File, UploadFile
+from app.services.video_services import process_video, get_video_result
 
 router = APIRouter()
 
 @router.post("/video")
-async def upload_video(file: UploadFile):
+async def upload_video(file: UploadFile = File(...)):
 
     os.makedirs("data", exist_ok=True)
 
@@ -15,3 +15,8 @@ async def upload_video(file: UploadFile):
         f.write(await file.read())
 
     return process_video(path)
+
+
+@router.get("/video-result/{task_id}")
+async def video_result(task_id: str):
+    return get_video_result(task_id)

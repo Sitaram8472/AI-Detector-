@@ -6,6 +6,7 @@ torch
 torchvision
 opencv-python
 Pillow
+facenet-pytorch
 retina-face
 matplotlib
 seaborn

@@ -7,7 +7,9 @@ from torchvision import models
 
 BASE_DIR = Path(__file__).resolve().parent
 MODELS_DIR = BASE_DIR / "models"
-ML_MODULE_MODELS_DIR = BASE_DIR.parent / "deepTrace" / "ml_module" / "models"
+PROJECT_ROOT = BASE_DIR.parents[1]
+ML_MODULE_MODELS_DIR = PROJECT_ROOT / "deepTrace" / "ml_module" / "models"
+PROJECT_IMAGE_MODELS_DIR = PROJECT_ROOT / "project" / "saved_model"
 
 
 def _validate_model_file(path: Path) -> None:
@@ -51,6 +53,8 @@ def _load_image_model_state_dict(_filename: str):
 	path = _first_existing_path(
 		MODELS_DIR / "image_models.pth",
 		MODELS_DIR / "image_model.pth",
+		PROJECT_IMAGE_MODELS_DIR / "best_model.pth",
+		PROJECT_IMAGE_MODELS_DIR / "final_model.pth",
 		ML_MODULE_MODELS_DIR / "image" / "image_model.pth",
 	)
 	state_dict = torch.load(path, map_location="cpu")
@@ -97,6 +101,13 @@ def _load_text_model(_filename: str):
 	)
 
 
+def _load_source_model(_filename: str):
+	return _load_joblib_from_paths(
+		MODELS_DIR / "source_model.pkl",
+		ML_MODULE_MODELS_DIR / "text" / "source_model.pkl",
+	)
+
+
 def _load_text_vectorizer(_filename: str):
 	return _load_joblib_from_paths(
 		MODELS_DIR / "tfidf_vectorizer.pkl",
@@ -114,4 +125,5 @@ def _safe_load(loader, filename: str):
 video_model, video_model_error = _safe_load(_load_video_model, "video_model.pth")
 image_model, image_model_error = _safe_load(_load_image_model_state_dict, "image_models.pth")
 text_model, text_model_error = _safe_load(_load_text_model, "text_model.pkl")
+source_model, source_model_error = _safe_load(_load_source_model, "source_model.pkl")
 text_vectorizer, text_vectorizer_error = _safe_load(_load_text_vectorizer, "tfidf_vectorizer.pkl")

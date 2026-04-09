@@ -4,6 +4,7 @@ import {
   Image,
   Video,
   FileText,
+  FileSearch,
   History,
   LogOut,
   ShieldCheck,
@@ -17,6 +18,11 @@ const Sidebar = () => {
     { name: "Image Detect", path: "/detect-image", icon: <Image size={20} /> },
     { name: "Video Detect", path: "/detect-video", icon: <Video size={20} /> },
     { name: "Text Detect", path: "/detect-text", icon: <FileText size={20} /> },
+    {
+      name: "Plagiarism",
+      path: "/detect-plagiarism",
+      icon: <FileSearch size={20} />,
+    },
     { name: "History", path: "/history", icon: <History size={20} /> },
   ];
 

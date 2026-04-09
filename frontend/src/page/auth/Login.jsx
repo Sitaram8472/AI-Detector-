@@ -1,8 +1,33 @@
-import React from "react";
+import React, { useState } from "react";
 import { Mail, Lock, ArrowRight, ShieldCheck } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { signIn } from "../../lib/api";
 
 const Login = () => {
+  const navigate = useNavigate();
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    setLoading(true);
+    setMessage("");
+    setError("");
+
+    try {
+      const data = await signIn(username, password);
+      setMessage(data.message || "Login successful");
+      navigate("/");
+    } catch (err) {
+      setError(err.message || "Login failed.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#0f172a] p-4 text-white">
       <div className="max-w-4xl w-full flex bg-[#1e293b] rounded-3xl overflow-hidden shadow-2xl border border-slate-700">
@@ -29,7 +54,7 @@ const Login = () => {
             Enter your credentials to access the dashboard.
           </p>
 
-          <form className="space-y-6">
+          <form className="space-y-6" onSubmit={handleSubmit}>
             <div className="relative">
               <Mail
                 className="absolute left-3 top-3.5 text-slate-500"
@@ -39,6 +64,8 @@ const Login = () => {
                 type="email"
                 placeholder="Email Address"
                 className="w-full bg-slate-900 border border-slate-700 rounded-xl py-3 pl-12 pr-4 focus:ring-2 focus:ring-blue-500 outline-none transition"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
               />
             </div>
 
@@ -51,13 +78,18 @@ const Login = () => {
                 type="password"
                 placeholder="Password"
                 className="w-full bg-slate-900 border border-slate-700 rounded-xl py-3 pl-12 pr-4 focus:ring-2 focus:ring-blue-500 outline-none transition"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
               />
             </div>
 
-            <button className="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-xl flex items-center justify-center gap-2 transition-all transform hover:scale-[1.02]">
-              Sign In <ArrowRight size={20} />
+            <button className="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-xl flex items-center justify-center gap-2 transition-all transform hover:scale-[1.02] disabled:opacity-60" disabled={loading}>
+              {loading ? "Signing In..." : <>Sign In <ArrowRight size={20} /></>}
             </button>
           </form>
+
+          {message ? <p className="mt-4 text-sm text-green-400">{message}</p> : null}
+          {error ? <p className="mt-4 text-sm text-red-400">{error}</p> : null}
 
           <p className="mt-8 text-center text-slate-400 text-sm">
             Don't have an account?{" "}

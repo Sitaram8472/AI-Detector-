@@ -1,5 +1,5 @@
 import React from "react";
-import { Image, Video, FileText, Activity } from "lucide-react";
+import { Image, Video, FileText, Activity, FileSearch } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const Dashboard = () => {
@@ -10,17 +10,23 @@ const Dashboard = () => {
       path: "/detect-image",
       desc: "Scan for AI-generated faces or art.",
     },
-    {
-      title: "Video Detection",
-      icon: <Video />,
-      path: "/detect-video",
-      desc: "Analyze deepfake movements and frames.",
-    },
+    // {
+    //   title: "Video Detection",
+    //   icon: <Video />,
+    //   path: "/detect-video",
+    //   desc: "Analyze deepfake movements and frames.",
+    // },
     {
       title: "Text Analysis",
       icon: <FileText />,
       path: "/detect-text",
       desc: "Check for GPT or LLM patterns.",
+    },
+    {
+      title: "Plagiarism Check",
+      icon: <FileSearch />,
+      path: "/detect-plagiarism",
+      desc: "Detect copied content and likely source.",
     },
   ];
 
@@ -33,7 +39,7 @@ const Dashboard = () => {
         Welcome back. Select a tool to begin analyzing content.
       </p>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {tools.map((tool) => (
           <Link
             to={tool.path}

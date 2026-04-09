@@ -1,10 +1,13 @@
-from fastapi import APIRouter, UploadFile
+import os
+
+from fastapi import APIRouter, File, UploadFile
 from app.services.image_services import analyze_image
 
 router = APIRouter()
 
 @router.post("/image")
-async def image_detect(file: UploadFile):
+async def image_detect(file: UploadFile = File(...)):
+    os.makedirs("data", exist_ok=True)
     path = f"data/{file.filename}"
 
     # Save file

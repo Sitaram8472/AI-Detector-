@@ -1,8 +1,35 @@
-import React from "react";
+import React, { useState } from "react";
 import { User, Mail, Lock, ShieldCheck } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { signUp } from "../../lib/api";
 
 const Register = () => {
+  const navigate = useNavigate();
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    setLoading(true);
+    setMessage("");
+    setError("");
+
+    try {
+      const username = email.trim() || fullName.trim();
+      const data = await signUp(username, password);
+      setMessage(data.message || "Account created successfully");
+      navigate("/login");
+    } catch (err) {
+      setError(err.message || "Signup failed.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#0f172a] p-4 text-white font-sans">
       <div className="max-w-md w-full bg-[#1e293b] p-10 rounded-3xl shadow-2xl border border-slate-700 relative overflow-hidden">
@@ -20,13 +47,15 @@ const Register = () => {
           Start detecting AI content in seconds.
         </p>
 
-        <form className="space-y-5">
+        <form className="space-y-5" onSubmit={handleSubmit}>
           <div className="relative">
             <User className="absolute left-3 top-3 text-slate-500" size={18} />
             <input
               type="text"
               placeholder="Full Name"
               className="w-full bg-slate-900/50 border border-slate-700 rounded-xl py-3 pl-11 outline-none focus:border-blue-500"
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
             />
           </div>
           <div className="relative">
@@ -35,6 +64,8 @@ const Register = () => {
               type="email"
               placeholder="Email"
               className="w-full bg-slate-900/50 border border-slate-700 rounded-xl py-3 pl-11 outline-none focus:border-blue-500"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
           </div>
           <div className="relative">
@@ -43,13 +74,18 @@ const Register = () => {
               type="password"
               placeholder="Password"
               className="w-full bg-slate-900/50 border border-slate-700 rounded-xl py-3 pl-11 outline-none focus:border-blue-500"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
           </div>
 
-          <button className="w-full py-4 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl font-bold shadow-lg shadow-blue-500/20 hover:opacity-90 transition">
-            Create Account
+          <button className="w-full py-4 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl font-bold shadow-lg shadow-blue-500/20 hover:opacity-90 transition disabled:opacity-60" disabled={loading}>
+            {loading ? "Creating..." : "Create Account"}
           </button>
         </form>
+
+        {message ? <p className="mt-4 text-sm text-green-400">{message}</p> : null}
+        {error ? <p className="mt-4 text-sm text-red-400">{error}</p> : null}
 
         <p className="mt-6 text-center text-slate-400 text-sm">
           Already a member?{" "}

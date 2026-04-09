@@ -7,5 +7,5 @@ celery_app = Celery(
 )
 
 celery_app.conf.task_routes = {
-    "app.workers.video_tasks.*": {"queue": "video_queue"}
+    "app.workers.video_task.*": {"queue": "video_queue"}
 }

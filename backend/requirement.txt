@@ -8,3 +8,4 @@ google-search-results
 pydantic
 numpy
 python-multipart
+pymongo

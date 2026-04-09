@@ -6,6 +6,7 @@ import Dashboard from "./page/Dashboard";
 import ImageDetection from "./page/ImageDetection";
 import VideoDetection from "./page/VideoDetection";
 import TextDetection from "./page/TextDetection";
+import Palgiarism_Detection from "./page/palgiarism_Detection";
 import History from "./page/History";
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
           <Route path="detect-image" element={<ImageDetection />} />
           <Route path="detect-video" element={<VideoDetection />} />
           <Route path="detect-text" element={<TextDetection />} />
+          <Route path="detect-plagiarism" element={<Palgiarism_Detection />} />
           <Route path="history" element={<History />} />
         </Route>
       </Routes>
